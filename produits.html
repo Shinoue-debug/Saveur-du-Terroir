@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr" data-lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nos produits — Saveur du Terroir</title>
+<meta name="description" content="Le catalogue complet Saveur du Terroir : fruits, légumes, produits laitiers, épicerie fine, boissons et snacks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="index.html#top" class="logo">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="32" height="32">
+          <circle cx="24" cy="24" r="21" fill="var(--color-primary)"/>
+          <path d="M24 12 C30 18 30 30 24 36 C18 30 18 18 24 12 Z" fill="#fff"/>
+        </svg>
+      </span>
+      <span class="logo-text">Saveur du Terroir</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Navigation principale">
+      <a href="index.html#top" data-i18n="nav.home">Accueil</a>
+      <a href="produits.html" data-i18n="nav.products">Produits</a>
+      <a href="index.html#pourquoi" data-i18n="nav.why">Pourquoi nous</a>
+      <a href="contact.html" data-i18n="nav.contact">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="lang-toggle" id="langToggle" aria-label="Changer de langue">
+        <span class="lang-option is-active" data-lang-btn="fr">FR</span>
+        <span class="lang-sep">/</span>
+        <span class="lang-option" data-lang-btn="en">EN</span>
+      </button>
+      <button class="cart-button" id="cartButton" aria-haspopup="dialog" aria-controls="cartDrawer">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 8H6"/>
+          <circle cx="9" cy="21" r="1.4"/>
+          <circle cx="18" cy="21" r="1.4"/>
+        </svg>
+        <span data-i18n="nav.cart">Panier</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ PAGE HEADER BANNER ============ -->
+<section class="page-banner">
+  <div class="page-banner-inner reveal">
+    <p class="eyebrow" data-i18n="page.products.eyebrow">Catalogue complet</p>
+    <h1 data-i18n="page.products.title">Tous nos produits</h1>
+    <p data-i18n="page.products.sub">Parcourez l'ensemble de notre sélection, rayon par rayon.</p>
+  </div>
+</section>
+
+<!-- ============ CATEGORIES / PRODUCTS ============ -->
+<section class="products-section">
+  <div class="category-filters reveal" id="categoryFilters" role="tablist" aria-label="Filtrer par catégorie"></div>
+  <div class="product-grid" id="productGrid"><!-- injected by script.js --></div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" id="contact">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo-text">Saveur du Terroir</span>
+      <p data-i18n="footer.tagline">Un voyage culinaire à travers les délices de notre terre.</p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">Contact</h4>
+      <p>shinouex@saveurduterroir.com</p>
+      <p>+221 77 000 00 00</p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.follow">Suivez-nous</h4>
+      <p><a href="#">Facebook</a></p>
+      <p><a href="#">Instagram</a></p>
+      <p><a href="#">Twitter</a></p>
+      <p><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Saveur du Terroir — <span>SHINOUE</span></p>
+  </div>
+</footer>
+
+<!-- ============ CART DRAWER ============ -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-label="Panier">
+  <div class="cart-drawer-head">
+    <h3 data-i18n="cart.title">Votre panier</h3>
+    <button class="drawer-close" id="drawerClose" aria-label="Fermer">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span data-i18n="cart.total">Total</span>
+      <strong id="cartTotal">0 FCFA</strong>
+    </div>
+    <button class="btn btn--primary btn--full" id="checkoutBtn" data-i18n="cart.checkout">Valider la commande</button>
+  </div>
+</aside>
+
+<script src="script.js"></script>
+</body>
+</html>
