@@ -157,8 +157,14 @@ const I18N = {
     'footer.tagline':'Un voyage culinaire à travers les délices de notre terre.',
     'footer.contact':'Contact', 'footer.follow':'Suivez-nous', 'footer.school':'Projet académique ESTM',
     'cart.title':'Votre panier', 'cart.total':'Total', 'cart.checkout':'Valider la commande', 'cart.empty':'Votre panier est vide.',
+    'checkout.form.title':'Vos informations de livraison',
+    'checkout.form.name':'Nom complet', 'checkout.form.phone':'Téléphone',
+    'checkout.form.address':'Adresse de livraison', 'checkout.form.city':'Quartier / Ville',
+    'checkout.form.note':'Note pour le livreur (optionnel)',
+    'checkout.form.back':'Retour au panier', 'checkout.form.submit':'Confirmer la commande',
     'checkout.success.title':'Commande confirmée !',
-    'checkout.success.body':'Merci pour votre confiance. Votre commande d\'un montant de {total} a bien été enregistrée, notre équipe vous contactera pour la livraison.',
+    'checkout.success.body':'Merci pour votre confiance. Votre commande d\'un montant de {total} a bien été enregistrée.',
+    'checkout.success.delivery':'Livraison prévue chez {name}, {address}, {city}. Vous serez contacté(e) au {phone}.',
     'checkout.success.close':'Fermer',
   },
   en: {
@@ -229,8 +235,14 @@ const I18N = {
     'footer.tagline':'A culinary journey through the delights of our land.',
     'footer.contact':'Contact', 'footer.follow':'Follow us', 'footer.school':'ESTM academic project',
     'cart.title':'Your cart', 'cart.total':'Total', 'cart.checkout':'Place order', 'cart.empty':'Your cart is empty.',
+    'checkout.form.title':'Your delivery details',
+    'checkout.form.name':'Full name', 'checkout.form.phone':'Phone number',
+    'checkout.form.address':'Delivery address', 'checkout.form.city':'Neighborhood / City',
+    'checkout.form.note':'Note for the delivery rider (optional)',
+    'checkout.form.back':'Back to cart', 'checkout.form.submit':'Confirm order',
     'checkout.success.title':'Order confirmed!',
-    'checkout.success.body':'Thank you for your trust. Your order totaling {total} has been recorded — our team will contact you about delivery.',
+    'checkout.success.body':'Thank you for your trust. Your order totaling {total} has been recorded.',
+    'checkout.success.delivery':'Delivery to {name}, {address}, {city}. You will be contacted at {phone}.',
     'checkout.success.close':'Close',
   }
 };
@@ -373,7 +385,25 @@ function removeOne(id){
   renderCart(); updateCartCount(); saveState();
 }
 
-function completeOrder(){
+function showCheckoutForm(){
+  const itemsWrap = document.getElementById('cartItems');
+  const formWrap = document.getElementById('checkoutFormWrap');
+  const footer = document.querySelector('.cart-footer');
+  if(itemsWrap) itemsWrap.hidden = true;
+  if(footer) footer.style.display = 'none';
+  if(formWrap) formWrap.hidden = false;
+}
+
+function hideCheckoutForm(){
+  const itemsWrap = document.getElementById('cartItems');
+  const formWrap = document.getElementById('checkoutFormWrap');
+  const footer = document.querySelector('.cart-footer');
+  if(itemsWrap) itemsWrap.hidden = false;
+  if(footer) footer.style.display = '';
+  if(formWrap) formWrap.hidden = true;
+}
+
+function completeOrder(deliveryInfo){
   const ids = Object.keys(cart).filter(id => cart[id] > 0);
   const total = ids.reduce((sum, id) => {
     const p = PRODUCTS.find(x => x.id === Number(id));
@@ -382,16 +412,28 @@ function completeOrder(){
   const totalLabel = `${total.toLocaleString('fr-FR')} FCFA`;
 
   const itemsWrap = document.getElementById('cartItems');
+  const formWrap = document.getElementById('checkoutFormWrap');
   const footer = document.querySelector('.cart-footer');
+
+  const deliveryLine = t('checkout.success.delivery')
+    .replace('{name}', deliveryInfo.name)
+    .replace('{address}', deliveryInfo.address)
+    .replace('{city}', deliveryInfo.city)
+    .replace('{phone}', deliveryInfo.phone);
+
   if(itemsWrap){
+    itemsWrap.hidden = false;
     itemsWrap.innerHTML = `
       <div class="order-confirmation">
         <div class="order-check" aria-hidden="true">✓</div>
         <h4>${t('checkout.success.title')}</h4>
         <p>${t('checkout.success.body').replace('{total}', `<strong>${totalLabel}</strong>`)}</p>
+        <p class="order-delivery">${deliveryLine}</p>
+        ${deliveryInfo.note ? `<p class="order-note">"${deliveryInfo.note}"</p>` : ''}
         <button class="btn btn--primary" id="closeConfirmation">${t('checkout.success.close')}</button>
       </div>`;
   }
+  if(formWrap) formWrap.hidden = true;
   if(footer) footer.style.display = 'none';
 
   const closeBtn = document.getElementById('closeConfirmation');
@@ -415,6 +457,7 @@ function openDrawer(){
 function closeDrawer(){
   document.getElementById('cartDrawer').classList.remove('is-open');
   document.getElementById('drawerOverlay').classList.remove('is-open');
+  hideCheckoutForm();
 }
 
 /* ---------------------- 7. ANIMATIONS (scroll reveal + header) ---------------------- */
@@ -507,8 +550,26 @@ document.addEventListener('DOMContentLoaded', () => {
     checkoutBtn.addEventListener('click', () => {
       const count = Object.values(cart).reduce((a,b) => a + b, 0);
       if(count === 0) return;
-      completeOrder();
+      showCheckoutForm();
+    });
+  }
+
+  const backToCart = document.getElementById('backToCart');
+  if(backToCart) backToCart.addEventListener('click', hideCheckoutForm);
+
+  const checkoutForm = document.getElementById('checkoutForm');
+  if(checkoutForm){
+    checkoutForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const deliveryInfo = {
+        name: document.getElementById('checkoutName').value.trim(),
+        phone: document.getElementById('checkoutPhone').value.trim(),
+        address: document.getElementById('checkoutAddress').value.trim(),
+        city: document.getElementById('checkoutCity').value.trim(),
+        note: document.getElementById('checkoutNote').value.trim(),
+      };
+      completeOrder(deliveryInfo);
+      checkoutForm.reset();
     });
   }
 });
-
