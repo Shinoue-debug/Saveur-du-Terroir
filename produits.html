@@ -74,7 +74,7 @@
     </div>
     <div class="footer-col">
       <h4 data-i18n="footer.contact">Contact</h4>
-      <p>contact@saveurduterroir.com</p>
+      <p>shinoue@saveurduterroir.com</p>
       <p>+221 77 000 00 00</p>
     </div>
     <div class="footer-col">
@@ -82,11 +82,11 @@
       <p><a href="#">Facebook</a></p>
       <p><a href="#">Instagram</a></p>
       <p><a href="#">Twitter</a></p>
-      <p><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></p>
+      <p><a href="https://github.com/Shinoue-debug" target="_blank" rel="noopener">GitHub</a></p>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 Saveur du Terroir — <span data-i18n="footer.school">Projet académique ESTM</span></p>
+    <p>© 2026 Saveur du Terroir — <span data-i18n="footer.school">SHINOUE</span></p>
   </div>
 </footer>
 
@@ -98,6 +98,34 @@
     <button class="drawer-close" id="drawerClose" aria-label="Fermer">✕</button>
   </div>
   <div class="cart-items" id="cartItems"></div>
+  <div class="checkout-form-wrap" id="checkoutFormWrap" hidden>
+    <form id="checkoutForm">
+      <label>
+        <span data-i18n="checkout.form.name">Nom complet</span>
+        <input type="text" id="checkoutName" required>
+      </label>
+      <label>
+        <span data-i18n="checkout.form.phone">Téléphone</span>
+        <input type="tel" id="checkoutPhone" required>
+      </label>
+      <label>
+        <span data-i18n="checkout.form.address">Adresse de livraison</span>
+        <input type="text" id="checkoutAddress" required>
+      </label>
+      <label>
+        <span data-i18n="checkout.form.city">Quartier / Ville</span>
+        <input type="text" id="checkoutCity" required>
+      </label>
+      <label>
+        <span data-i18n="checkout.form.note">Note pour le livreur (optionnel)</span>
+        <textarea id="checkoutNote" rows="2"></textarea>
+      </label>
+      <div class="checkout-form-actions">
+        <button type="button" class="btn btn--ghost" id="backToCart" data-i18n="checkout.form.back">Retour au panier</button>
+        <button type="submit" class="btn btn--primary" data-i18n="checkout.form.submit">Confirmer la commande</button>
+      </div>
+    </form>
+  </div>
   <div class="cart-footer">
     <div class="cart-total-row">
       <span data-i18n="cart.total">Total</span>
