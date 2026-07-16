@@ -4,7 +4,7 @@
    contact.html). Chaque fonction vérifie que les éléments existent avant
    d'agir, pour ne rien casser sur une page qui n'a pas tel ou tel bloc.
 
-   -> Pour modifier un produit EN DIRECT :
+   -> Pour modifier un produit EN DIRECT (ex. pendant la soutenance) :
       il suffit d'éditer le tableau PRODUCTS ci-dessous et de recharger
       la page. Rien d'autre à toucher.
    ========================================================================= */
@@ -157,7 +157,9 @@ const I18N = {
     'footer.tagline':'Un voyage culinaire à travers les délices de notre terre.',
     'footer.contact':'Contact', 'footer.follow':'Suivez-nous', 'footer.school':'Projet académique ESTM',
     'cart.title':'Votre panier', 'cart.total':'Total', 'cart.checkout':'Valider la commande', 'cart.empty':'Votre panier est vide.',
-    'checkout.alert':'Commande simulée ! (site vitrine — aucun paiement réel)',
+    'checkout.success.title':'Commande confirmée !',
+    'checkout.success.body':'Merci pour votre confiance. Votre commande d\'un montant de {total} a bien été enregistrée, notre équipe vous contactera pour la livraison.',
+    'checkout.success.close':'Fermer',
   },
   en: {
     'nav.home':'Home', 'nav.products':'Products', 'nav.why':'Why us', 'nav.contact':'Contact', 'nav.cart':'Cart',
@@ -227,7 +229,9 @@ const I18N = {
     'footer.tagline':'A culinary journey through the delights of our land.',
     'footer.contact':'Contact', 'footer.follow':'Follow us', 'footer.school':'ESTM academic project',
     'cart.title':'Your cart', 'cart.total':'Total', 'cart.checkout':'Place order', 'cart.empty':'Your cart is empty.',
-    'checkout.alert':'Order simulated! (showcase site — no real payment)',
+    'checkout.success.title':'Order confirmed!',
+    'checkout.success.body':'Thank you for your trust. Your order totaling {total} has been recorded — our team will contact you about delivery.',
+    'checkout.success.close':'Close',
   }
 };
 
@@ -369,6 +373,40 @@ function removeOne(id){
   renderCart(); updateCartCount(); saveState();
 }
 
+function completeOrder(){
+  const ids = Object.keys(cart).filter(id => cart[id] > 0);
+  const total = ids.reduce((sum, id) => {
+    const p = PRODUCTS.find(x => x.id === Number(id));
+    return sum + p.price * cart[id];
+  }, 0);
+  const totalLabel = `${total.toLocaleString('fr-FR')} FCFA`;
+
+  const itemsWrap = document.getElementById('cartItems');
+  const footer = document.querySelector('.cart-footer');
+  if(itemsWrap){
+    itemsWrap.innerHTML = `
+      <div class="order-confirmation">
+        <div class="order-check" aria-hidden="true">✓</div>
+        <h4>${t('checkout.success.title')}</h4>
+        <p>${t('checkout.success.body').replace('{total}', `<strong>${totalLabel}</strong>`)}</p>
+        <button class="btn btn--primary" id="closeConfirmation">${t('checkout.success.close')}</button>
+      </div>`;
+  }
+  if(footer) footer.style.display = 'none';
+
+  const closeBtn = document.getElementById('closeConfirmation');
+  if(closeBtn){
+    closeBtn.addEventListener('click', () => {
+      cart = {};
+      saveState();
+      updateCartCount();
+      if(footer) footer.style.display = '';
+      renderCart();
+      closeDrawer();
+    });
+  }
+}
+
 /* ---------------------- 6. INTERACTIONS UI ---------------------- */
 function openDrawer(){
   document.getElementById('cartDrawer').classList.add('is-open');
@@ -469,9 +507,8 @@ document.addEventListener('DOMContentLoaded', () => {
     checkoutBtn.addEventListener('click', () => {
       const count = Object.values(cart).reduce((a,b) => a + b, 0);
       if(count === 0) return;
-      alert(t('checkout.alert'));
-      cart = {};
-      renderCart(); updateCartCount(); saveState(); closeDrawer();
+      completeOrder();
     });
   }
 });
+
